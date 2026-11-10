@@ -58,3 +58,13 @@ El diseño cumple con la **Tercera Forma Normal (3FN)** para garantizar la consi
 | FK1 id_vehiculo        |----------------------------------------+
 | FK2 id_empleado (Mec.) |
 +------------------------+
+
+```mermaid
+erDiagram
+    CLIENTE ||--o{ VENTA : realiza
+    EMPLEADO ||--o{ VENTA : atiende
+    VENTA ||--|{ DETALLE_VENTA : contiene
+    VEHICULO ||--o| DETALLE_VENTA : incluye
+    VEHICULO ||--o{ SERVICIO_POSTVENTA : recibe
+    EMPLEADO ||--o{ SERVICIO_POSTVENTA : realiza
+```
