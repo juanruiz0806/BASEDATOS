@@ -83,7 +83,7 @@ SELECT
     modelo,
     año,
     precio_lista,
-    (EXTRACT(YEAR FROM CURRENT_DATE) - año) AS antiguedad_anios
+    (EXTRACT(YEAR FROM CURRENT_DATE) - año) AS antiguedad_años
 FROM 
     vehiculo
 WHERE 
@@ -366,7 +366,7 @@ INSERT INTO venta (numero_factura, subtotal, descuento, monto_total, metodo_pago
 VALUES ('F-TEST-2026', 0.00, 500.00, 0.00, 'Tarjeta de Crédito', 1, 1);
 
 -- 1. Insertar Vehículo #11 'Disponible'
-INSERT INTO vehiculo (vin, marca, modelo, anio, precio_lista, estado)
+INSERT INTO vehiculo (vin, marca, modelo, año, precio_lista, estado)
 VALUES ('VIN-TEST-SUCCESS', 'BMW', 'Series 3', 2024, 30000.00, 'Disponible');
 
 -- 2. Ejecutar inserción válida en DETALLE_VENTA
