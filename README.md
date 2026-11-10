@@ -58,3 +58,72 @@ El diseño cumple con la **Tercera Forma Normal (3FN)** para garantizar la consi
 | FK1 id_vehiculo        |----------------------------------------+
 | FK2 id_empleado (Mec.) |
 +------------------------+
+
+```mermaid
+erDiagram
+    VEHICULO {
+        int id_vehiculo PK
+        string vin UK
+        string marca
+        string modelo
+        int anio
+        decimal precio_lista
+        string estado
+    }
+
+    CLIENTE {
+        int id_cliente PK
+        string documento_identidad UK
+        string nombres
+        string apellidos
+        string telefono
+        string email
+        string ciudad
+    }
+
+    EMPLEADO {
+        int id_empleado PK
+        string codigo_empleado UK
+        string nombre
+        string rol
+        decimal comision_pct
+        date fecha_ingreso
+    }
+
+    VENTA {
+        int id_venta PK
+        string numero_factura UK
+        timestamp fecha_venta
+        decimal subtotal
+        decimal descuento
+        decimal monto_total
+        string metodo_pago
+        int id_cliente FK
+        int id_empleado FK
+    }
+
+    DETALLE_VENTA {
+        int id_detalle PK
+        int id_venta FK
+        int id_vehiculo FK,UK
+        decimal precio_final_pactado
+        int garantia_meses
+    }
+
+    SERVICIO_POSTVENTA {
+        int id_servicio PK
+        timestamp fecha
+        string descripcion
+        decimal costo_repuestos
+        decimal costo_mano_obra
+        string estado
+        int id_vehiculo FK
+        int id_empleado FK
+    }
+
+    CLIENTE ||--o{ VENTA : "registra (1 a 0..*)"
+    EMPLEADO ||--o{ VENTA : "vende (1 a 0..*)"
+    VENTA ||--|{ DETALLE_VENTA : "contiene (1 a 1..*)"
+    VEHICULO ||--o| DETALLE_VENTA : "pertenece a (1 a 0..1)"
+    VEHICULO ||--o{ SERVICIO_POSTVENTA : "recibe (1 a 0..*)"
+    EMPLEADO ||--o{ SERVICIO_POSTVENTA : "atiende (1 a 0..*)"
