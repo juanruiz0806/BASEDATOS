@@ -399,12 +399,15 @@ VALUES (11, 12, 30000.00, 12);
 --ERROR:  Precio no permitido: El precio final pactado ($30000.00) es inferior al 85% del precio de lista ($40000.00). El mínimo permitido es $34000.00.
 --CONTEXT:  PL/pgSQL function fn_validar_precio_minimo() line 19 at RAISE
 
---CASO DE PRUEBA 3|: RECHAZO POR VEHÍCULO NO DISPONIBLE
---Se utiliza el registro ya existente con id_vehiculo=2 , que ya fue vendido en el paso anterior. Se intenta registrar una venta con este vehículo, lo que debe generar un error y no permitir la inserción.
+--CASO DE PRUEBA 3: RECHAZO POR VEHICULO NO DISPONIBLE PARA VENTA ("RESERVADO")
 
--- Inserción infractora (Intentar vender un vehículo que ya fue vendido en los 10 registros iniciales)
+-- 1. Insertar un vehículo nuevo en estado 'Reservado' (para que no exista aún en detalle_venta)
+INSERT INTO vehiculo (vin, marca, modelo, año, precio_lista, estado)
+VALUES ('VIN-TEST-RESERVADO', 'Mazda', 'CX-30', 2024, 28000.00, 'Reservado');
+
+-- 2. Intentar vender el vehículo recién creado (Debe fallar activando el TRIGGER)
 INSERT INTO detalle_venta (id_venta, id_vehiculo, precio_final_pactado, garantia_meses)
-VALUES (11, 2, 28000.00, 12);
+VALUES (11, (SELECT id_vehiculo FROM vehiculo WHERE vin = 'VIN-TEST-RESERVADO'), 26000.00, 12);
 
 -- #SALIDA ESPERADA
 --ERROR:  No se puede procesar la venta: El vehículo con ID 2 no se encuentra en estado "Disponible" (Estado actual: Vendido).
